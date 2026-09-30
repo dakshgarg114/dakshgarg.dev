@@ -1,0 +1,80 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+---
+
+<Base title="Writing | Daksh Garg" description="Build logs on getting back into flow as a developer in the AI era.">
+  <main class="wrap page">
+    <a class="link-arrow back" href="/">← Home</a>
+    <h1>Writing</h1>
+    <p class="lede">Build logs on getting back into flow as a developer in the AI era.</p>
+    <ul>
+      {
+        posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}/`}>
+              <span class="label">{fmt(post.data.date)}</span>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Base>
+
+<style>
+  .page {
+    max-width: 820px;
+    padding-top: 48px;
+    padding-bottom: 96px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(64px, 12vw, 128px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-top: 32px;
+  }
+
+  .lede {
+    color: var(--ink-soft);
+    margin-top: 16px;
+  }
+
+  ul {
+    list-style: none;
+    margin-top: 48px;
+  }
+
+  li a {
+    display: block;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  li a .label {
+    color: var(--ink-soft);
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  li a p {
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  li a:hover h2 {
+    color: var(--accent);
+  }
+</style>
